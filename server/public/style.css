@@ -1,0 +1,44 @@
+#form-container {
+  position: relative;
+  margin: 0 auto;
+  margin-top: 200px;
+  width: 800px;
+  height: 300px;
+  border: 2px #a3a3a3 solid;
+}
+
+#form-container h5 {
+  color: #009688;
+  margin-left: 15px;
+  margin-top: 15px;
+}
+
+.row {
+  margin-top: 25px;
+}
+
+#event-name-input {
+  margin-left: 65px;
+  width: 240px;
+}
+
+#date-input {
+  text-align: center;
+  margin-left: 110px;
+  width: 80px;
+}
+
+#time-input {
+  text-align: center;
+  width: 80px;
+}
+
+#event-notes-input {
+  margin-left: 65px;
+}
+
+#submit-button {
+  position: absolute;
+  top: 195px;
+  left: 530px;
+}
