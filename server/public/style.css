@@ -2,13 +2,13 @@
   position: relative;
   margin: 0 auto;
   margin-top: 200px;
+  margin-bottom: 100px;
   width: 800px;
   height: 300px;
   border: 2px #a3a3a3 solid;
 }
 
 #form-container h5 {
-  color: #009688;
   margin-left: 15px;
   margin-top: 15px;
 }
@@ -41,4 +41,16 @@
   position: absolute;
   top: 195px;
   left: 530px;
+}
+
+.panel {
+  margin: 0 auto;
+  margin-bottom: 40px;
+  width: 800px;
+  border:  2px #a3a3a3 solid;
+  border-radius: 0;
+}
+
+.panel-title span {
+  margin-right: 50px;
 }

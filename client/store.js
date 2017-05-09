@@ -3,9 +3,11 @@ const eventsState = []
 const formState = {name: '', date: '', time: '', notes: ''}
 
 function events(state = eventsState, action) {
+  const stateClone = []
   switch (action.type) {
     case 'NEW_EVENT':
-      return state.concat(action.text)
+      stateClone.push(action.text)
+      return state.concat(stateClone)
     default: return state
   }
 }
@@ -26,7 +28,7 @@ function form(state = formState, action) {
       stateClone.notes = action.text
       return stateClone
     case 'NEW_EVENT':
-      return ''
+      return formState
     default: return state
   }
 }
