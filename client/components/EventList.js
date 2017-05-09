@@ -1,5 +1,5 @@
 const React = require('react')
-const store = require('./store')
+const store = require('../store')
 
 const EventList = (props) => {
   const events = store.getState().events

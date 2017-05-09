@@ -5,9 +5,12 @@
   "main": "server/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "bundle": "browserify client/ -o server/public/main.js",
-    "watch": "watchify client/ -v -o server/public/main.js -t babelify",
-    "start": "node ."
+    "bundle": "browserify client/ -t babelify -o server/public/main.js",
+    "watch:server": "nodemon .",
+    "watch:client": "watchify client/ -v -o server/public/main.js -t babelify",
+    "watch": "run-p watch:server watch:client",
+    "start:server": "node .",
+    "start": "run-s bundle start:server"
   },
   "repository": {
     "type": "git",
@@ -24,6 +27,8 @@
     "babel-plugin-transform-react-jsx": "^6.24.1",
     "babelify": "^7.3.0",
     "browserify": "^14.3.0",
+    "nodemon": "^1.11.0",
+    "npm-run-all": "^4.0.2",
     "watchify": "^3.9.0"
   },
   "dependencies": {
