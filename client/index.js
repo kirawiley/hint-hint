@@ -7,6 +7,14 @@ const store = require('./store')
 const container = document.getElementById('container')
 window.store = store
 
+fetch('/schedule')
+.then((response) => {
+  response.json()
+})
+.then((schedule) => {
+  store.dispatch({ type: 'SCHEDULE_LOADED', content: schedule })
+})
+
 function App(props) {
   return (
     <div>

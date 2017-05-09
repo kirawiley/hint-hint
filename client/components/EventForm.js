@@ -1,6 +1,19 @@
 const React = require('react')
 const store = require('../store')
 
+const addToSchedule = (scheduleItem) => {
+  return fetch('/schedule', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(scheduleItem)
+  })
+  .then(() => {
+    store.dispatch({ type: 'NEW_EVENT', text: store.getState().form })
+  })
+}
+
 const EventForm = (props) => {
   const input = store.getState().form
   const { name, date, time, notes } = props
@@ -30,9 +43,7 @@ const EventForm = (props) => {
             store.dispatch({ type: 'INPUT_NOTES_CHANGED', text: event.target.value})
           }}/>
         </div>
-        <button id="submit-button" className="btn waves-effect waves-light" type="submit" name="action" onClick={() => {
-          store.dispatch({ type: 'NEW_EVENT', text: store.getState().form })
-        }}>
+        <button id="submit-button" className="btn waves-effect waves-light" type="submit" name="action" onClick={ addToSchedule }>
           Submit
         </button>
       </div>

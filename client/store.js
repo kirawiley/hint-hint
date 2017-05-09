@@ -8,6 +8,8 @@ function events(state = eventsState, action) {
     case 'NEW_EVENT':
       stateClone.push(action.text)
       return state.concat(stateClone)
+    case 'SCHEDULE_LOADED':
+      return action.content
     default: return state
   }
 }
