@@ -9,7 +9,7 @@ window.store = store
 
 fetch('/schedule')
 .then((response) => {
-  response.json()
+  return response.json()
 })
 .then((schedule) => {
   store.dispatch({ type: 'SCHEDULE_LOADED', content: schedule })
