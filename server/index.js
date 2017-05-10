@@ -11,16 +11,16 @@ const publicPath = path.join(__dirname, '/public')
 app.use(express.static(publicPath))
 
 app.get('/schedule', (req, res) => {
-  db.get('items', (err, value) => {
+  db.get('events', (err, value) => {
     const schedule = JSON.parse(value)
-    console.log(schedule)
+    res.json(schedule)
   })
 })
 
 app.post('/schedule', (req, res) => {
   const scheduleItem = req.body
-  db.put('items', JSON.stringify(scheduleItem))
-  res.sendStatus(201).json(scheduleItem)
+  db.put('events', JSON.stringify(scheduleItem))
+  res.json(scheduleItem)
 })
 
 app.listen(3000, () => {
