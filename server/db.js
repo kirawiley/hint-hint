@@ -1,14 +1,21 @@
 const levelup = require('levelup')
 const db = levelup('./hint-hint')
 
-function getDatabase() {
-  new Promise((resolve, reject) => {
-    db.get('events', (err, value) => {
-      const schedule = JSON.parse(value)
-      res.json(schedule)
+function getCollection(key) {
+  return new Promise((resolve, reject) => {
+    db.get(key, (err, value) => {
+      const items = JSON.parse(value)
+      resolve(items)
+    })
+  })
+}
+
+function updateCollection(key, value) {
+  return new Promise((resolve, reject) => {
+    db.put(key, value, (err) => {
       resolve()
     })
   })
 }
 
-module.exports = getDatabase
+module.exports = getCollection, updateCollection
