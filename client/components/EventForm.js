@@ -7,15 +7,16 @@ const EventForm = (props) => {
   const { name, date, time, notes } = props
 
   const addToSchedule = () => {
+    const formState = store.getState().form
     return fetch('/schedule', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify(schedule)
+      body: JSON.stringify(formState)
     })
     .then(() => {
-      store.dispatch({ type: 'NEW_EVENT', text: store.getState().form })
+      store.dispatch({ type: 'NEW_EVENT', text: formState })
     })
   }
 
@@ -29,12 +30,12 @@ const EventForm = (props) => {
           }}/>
         </div>
         <div className="input-field col s4">
-          <input placeholder="M / D / Y" id="date-input" value={ input.date } type="text" className="validate" onChange={(event) => {
+          <input id="date-input" value={ input.date } type="date" onChange={(event) => {
             store.dispatch({ type: 'INPUT_DATE_CHANGED', text: event.target.value })
           }}/>
         </div>
         <div className="input-field col s4">
-          <input placeholder="Time" id="time-input" value={ input.time } type="text" className="validate" onChange={(event) => {
+          <input id="time-input" value={ input.time } type="time" onChange={(event) => {
             store.dispatch({ type: 'INPUT_TIME_CHANGED', text: event.target.value })
           }}/>
         </div>

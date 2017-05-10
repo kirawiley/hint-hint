@@ -25,12 +25,13 @@
 #date-input {
   text-align: center;
   margin-left: 110px;
-  width: 80px;
+  width: 140px;
 }
 
 #time-input {
   text-align: center;
-  width: 80px;
+  margin-left: 60px;
+  width: 100px;
 }
 
 #event-notes-input {
