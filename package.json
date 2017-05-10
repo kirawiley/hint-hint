@@ -10,7 +10,8 @@
     "watch:client": "watchify client/ -v -o server/public/main.js -t babelify",
     "watch": "run-p watch:server watch:client",
     "start:server": "node .",
-    "start": "run-s bundle start:server"
+    "start": "run-s bundle start:server",
+    "seed": "node server/seed.js"
   },
   "repository": {
     "type": "git",
