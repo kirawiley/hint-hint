@@ -1,7 +1,6 @@
 const levelup = require('levelup')
-const db = levelup('./hint-hint')
 
-function getCollection(key) {
+function getCollection(db, key) {
   return new Promise((resolve, reject) => {
     db.get(key, (err, value) => {
       const items = JSON.parse(value)
@@ -10,7 +9,7 @@ function getCollection(key) {
   })
 }
 
-function updateCollection(key, value) {
+function updateCollection(db, key, value) {
   return new Promise((resolve, reject) => {
     db.put(key, value, (err) => {
       resolve()
@@ -18,4 +17,4 @@ function updateCollection(key, value) {
   })
 }
 
-module.exports = getCollection, updateCollection
+module.exports = { getCollection, updateCollection }

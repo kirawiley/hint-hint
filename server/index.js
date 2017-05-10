@@ -1,7 +1,7 @@
 const express = require('express')
 const path = require('path')
 const bodyParser = require('body-parser')
-const { getCollection, updateCollection } = require('./db.js')
+const dbFunctions = require('./db.js')
 const levelup = require('levelup')
 const db = levelup('./hint-hint')
 const app = express()
@@ -12,7 +12,7 @@ const publicPath = path.join(__dirname, '/public')
 app.use(express.static(publicPath))
 
 app.get('/schedule', (req, res) => {
-  getCollection('events')
+  dbFunctions.getCollection(db, 'events')
     .then((data) => {
       res.json(data)
     })
@@ -20,13 +20,13 @@ app.get('/schedule', (req, res) => {
 
 app.post('/schedule', (req, res) => {
   const scheduleItem = req.body
-  getCollection('events')
+  dbFunctions.getCollection(db, 'events')
     .then((data) => {
       const updated = data.concat([scheduleItem])
-      updateCollection(key, JSON.stringify(updated))
+      return dbFunctions.updateCollection(db, 'events', JSON.stringify(updated))
     })
-    .then((data) => {
-      res.json(data)
+    .then(() => {
+      res.json(scheduleItem)
     })
 })
 
