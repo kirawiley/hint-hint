@@ -4,11 +4,11 @@ const Redux = require('redux')
 const EventForm = require('./components/EventForm')
 const EventList = require('./components/EventList')
 const store = require('./store')
-const MuiThemeProvider = require('material-ui/styles/MuiThemeProvider')
+const MuiThemeProvider = require('material-ui/styles/MuiThemeProvider').default
 const injectTapEventPlugin = require('react-tap-event-plugin')
 const container = document.getElementById('container')
-injectTapEventPlugin()
 window.store = store
+injectTapEventPlugin()
 
 fetch('/schedule')
 .then((response) => {
