@@ -4,6 +4,7 @@ const store = require('../store')
 const EventList = (props) => {
   const events = store.getState().events
   const { name, date, time, notes } = props
+
   const eachEvent = events.map((event, i) => {
       return (
         <div className="panel panel-default" key={ i }>
