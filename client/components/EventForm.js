@@ -11,17 +11,27 @@ const EventForm = (props) => {
   const schedule = store.getState().events
   const { name, day, time, notes } = props
 
+  const formatSchedule = (formState) => {
+    const combinedDate = new Date(formState.day + ' ' + formState.time)
+    return {
+      name: formState.name,
+      date: combinedDate.valueOf(),
+      notes: formState.notes
+    }
+  }
+
   const addToSchedule = () => {
     const formState = store.getState().form
+    const scheduleItem = formatSchedule(formState)
     return fetch('/schedule', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify(formState)
+      body: JSON.stringify(scheduleItem)
     })
     .then(() => {
-      store.dispatch({ type: 'NEW_EVENT', text: formState })
+      store.dispatch({ type: 'NEW_EVENT', text: scheduleItem })
     })
   }
 
