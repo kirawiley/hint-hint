@@ -1,5 +1,6 @@
 const React = require('react')
 const store = require('../store')
+const moment = require('moment')
 const RaisedButton = require('material-ui/RaisedButton').default
 const TextField = require('material-ui/TextField').default
 const DatePicker = require('material-ui/DatePicker').default
@@ -40,13 +41,18 @@ const EventForm = (props) => {
             />
         </div>
         <div className="col-xs-4">
-          <DatePicker id="event-date-input" hintText="Date" onChange={(event) => {
-            store.dispatch({ type: 'INPUT_DATE_CHANGED', text: '' })
+          <DatePicker id="event-date-input" hintText="Date" onChange={(_, date) => {
+            const month = date.getMonth() + 1
+            const dateString = date.getFullYear() + '/' + month + '/' + date.getDate()
+            console.log(dateString)
+            store.dispatch({ type: 'INPUT_DATE_CHANGED', text: dateString })
           }}/>
         </div>
         <div className="col-xs-4">
-          <TimePicker id="event-time-input" hintText="Time" onChange={(event) => {
-            store.dispatch({ type: 'INPUT_TIME_CHANGED', text: '' })
+          <TimePicker id="event-time-input" hintText="Time" onChange={(_, date) => {
+              const timeString = date.getHours() + ':' + date.getMinutes()
+              console.log(timeString)
+            store.dispatch({ type: 'INPUT_TIME_CHANGED', text: timeString })
           }}/>
         </div>
       </div>
@@ -63,7 +69,7 @@ const EventForm = (props) => {
             />
         </div>
         <div className="col-xs-6">
-          <RaisedButton id="submit-button" label="Submit" primary={true} />
+          <RaisedButton id="submit-button" label="Submit" primary={true} onClick={ addToSchedule }/>
         </div>
       </div>
     </div>
