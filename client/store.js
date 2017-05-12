@@ -1,6 +1,6 @@
 const Redux = require('redux')
 const eventsState = []
-const formState = {name: '', date: '', time: '', notes: ''}
+const formState = {name: '', day: '', dayObject: null, time: '', timeObject: null, notes: ''}
 
 function events(state = eventsState, action) {
   const stateClone = []
@@ -21,10 +21,12 @@ function form(state = formState, action) {
      stateClone.name = action.text
      return stateClone
     case 'INPUT_DATE_CHANGED':
-      stateClone.date = action.text
+      stateClone.day = action.text
+      stateClone.dayObject = action.date
       return stateClone
     case 'INPUT_TIME_CHANGED':
       stateClone.time = action.text
+      stateClone.timeObject = action.date
       return stateClone
     case 'INPUT_NOTES_CHANGED':
       stateClone.notes = action.text

@@ -1,54 +1,92 @@
 const React = require('react')
 const store = require('../store')
+const moment = require('moment')
+const RaisedButton = require('material-ui/RaisedButton').default
+const TextField = require('material-ui/TextField').default
+const DatePicker = require('material-ui/DatePicker').default
+const TimePicker = require('material-ui/TimePicker').default
 
 const EventForm = (props) => {
   const input = store.getState().form
   const schedule = store.getState().events
-  const { name, date, time, notes } = props
+  const { name, day, time, notes } = props
+
+  const formatSchedule = (formState) => {
+    const combinedDate = new Date(formState.day + ' ' + formState.time)
+    return {
+      name: formState.name,
+      date: combinedDate.valueOf(),
+      notes: formState.notes
+    }
+  }
 
   const addToSchedule = () => {
     const formState = store.getState().form
+    const scheduleItem = formatSchedule(formState)
     return fetch('/schedule', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify(formState)
+      body: JSON.stringify(scheduleItem)
     })
     .then(() => {
-      store.dispatch({ type: 'NEW_EVENT', text: formState })
+      store.dispatch({ type: 'NEW_EVENT', text: scheduleItem })
     })
   }
 
   return (
     <div id="form-container">
-      <h5>Create an event:</h5>
+      <h4>Create an event:</h4>
       <div className="row">
-        <div className="input-field col s4">
-          <input placeholder="Event Name" id="event-name-input" value={ input.name } type="text" className="validate" onChange={(event) => {
-            store.dispatch({ type: 'INPUT_NAME_CHANGED', text: event.target.value })
-          }}/>
+        <div className="col-xs-4">
+          <TextField
+            className="event-name-input"
+            floatingLabelText="Event Name"
+            floatingLabelFixed={true}
+            value={ input.name }
+            onChange={(event) => {
+              store.dispatch({ type: 'INPUT_NAME_CHANGED', text: event.target.value })
+            }}
+            />
         </div>
-        <div className="input-field col s4">
-          <input id="date-input" value={ input.date } type="date" onChange={(event) => {
-            store.dispatch({ type: 'INPUT_DATE_CHANGED', text: event.target.value })
-          }}/>
+        <div className="col-xs-4">
+          <DatePicker className="event-date-input"
+            floatingLabelText="Date"
+            floatingLabelFixed={true}
+            value={input.dayObject}
+            onChange={(_, date) => {
+              const month = date.getMonth() + 1
+              const dateString = date.getFullYear() + '/' + month + '/' + date.getDate()
+              store.dispatch({ type: 'INPUT_DATE_CHANGED', text: dateString, date: date })
+            }}/>
         </div>
-        <div className="input-field col s4">
-          <input id="time-input" value={ input.time } type="time" onChange={(event) => {
-            store.dispatch({ type: 'INPUT_TIME_CHANGED', text: event.target.value })
-          }}/>
+        <div className="col-xs-4">
+          <TimePicker className="event-time-input"
+            floatingLabelText="Time"
+            floatingLabelFixed={true}
+            value={input.timeObject}
+            onChange={(_, date) => {
+              const timeString = date.getHours() + ':' + date.getMinutes()
+              store.dispatch({ type: 'INPUT_TIME_CHANGED', text: timeString, date: date })
+            }}/>
         </div>
       </div>
       <div className="row">
-        <div className="input-field col s6">
-          <input placeholder="Event Description/Notes" id="event-notes-input" value={ input.notes } type="text" className="validate" onChange={(event) => {
-            store.dispatch({ type: 'INPUT_NOTES_CHANGED', text: event.target.value })
-          }}/>
+        <div className="col-xs-6">
+          <TextField
+            className="event-notes-input"
+            floatingLabelText="Event Description/Notes"
+            floatingLabelFixed={true}
+            value={ input.notes }
+            onChange={(event) => {
+              store.dispatch({ type: 'INPUT_NOTES_CHANGED', text: event.target.value })
+            }}
+            />
         </div>
-        <button id="submit-button" className="btn waves-effect waves-light" type="submit" name="action" onClick={ addToSchedule }>
-          Submit
-        </button>
+        <div className="col-xs-6">
+          <RaisedButton className="submit-button" label="Submit" primary={true} onClick={ addToSchedule }/>
+        </div>
       </div>
     </div>
   )
