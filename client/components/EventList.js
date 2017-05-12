@@ -6,7 +6,7 @@ const EventList = (props) => {
   const events = store.getState().events
   const { name, day, time, notes } = props
 
-  events.sort((a, b) => {
+  const sortedEvents = Array.from(events).sort((a, b) => {
     if (a.date > b.date) {
       return 1
     }
@@ -16,7 +16,7 @@ const EventList = (props) => {
     return 0
   })
 
-  const eachEvent = events.map((event, i) => {
+  const eachEvent = sortedEvents.map((event, i) => {
     const displayDate = moment(event.date).format('MM/DD/YYYY hh:mm a')
       return (
         <div className="panel panel-default" key={ i }>
