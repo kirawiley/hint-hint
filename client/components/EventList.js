@@ -7,14 +7,16 @@ const EventList = (props) => {
   const { name, day, time, notes } = props
 
   const eachEvent = events.map((event, i) => {
+    const displayDay = moment(event.day).format('MM/DD/YYYY')
+    const displayTime = moment(event.time).format('HH:mm a')
 
       return (
         <div className="panel panel-default" key={ i }>
           <div className="panel-heading">
             <h3 className="panel-title">
               <span>{ event.name }</span>
-              <span>{ event.day }</span>
-              <span>{ event.time }</span>
+              <span>{ displayDay }</span>
+              <span>{ displayTime }</span>
             </h3>
           </div>
           <div className="panel-body">

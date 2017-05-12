@@ -9,7 +9,7 @@ const TimePicker = require('material-ui/TimePicker').default
 const EventForm = (props) => {
   const input = store.getState().form
   const schedule = store.getState().events
-  const { name, date, time, notes } = props
+  const { name, day, time, notes } = props
 
   const addToSchedule = () => {
     const formState = store.getState().form
@@ -44,14 +44,12 @@ const EventForm = (props) => {
           <DatePicker id="event-date-input" hintText="Date" onChange={(_, date) => {
             const month = date.getMonth() + 1
             const dateString = date.getFullYear() + '/' + month + '/' + date.getDate()
-            console.log(dateString)
             store.dispatch({ type: 'INPUT_DATE_CHANGED', text: dateString })
           }}/>
         </div>
         <div className="col-xs-4">
           <TimePicker id="event-time-input" hintText="Time" onChange={(_, date) => {
               const timeString = date.getHours() + ':' + date.getMinutes()
-              console.log(timeString)
             store.dispatch({ type: 'INPUT_TIME_CHANGED', text: timeString })
           }}/>
         </div>
