@@ -54,19 +54,21 @@ const EventForm = (props) => {
           <DatePicker className="event-date-input"
             floatingLabelText="Date"
             floatingLabelFixed={true}
+            value={input.dayObject}
             onChange={(_, date) => {
               const month = date.getMonth() + 1
               const dateString = date.getFullYear() + '/' + month + '/' + date.getDate()
-              store.dispatch({ type: 'INPUT_DATE_CHANGED', text: dateString })
+              store.dispatch({ type: 'INPUT_DATE_CHANGED', text: dateString, date: date })
             }}/>
         </div>
         <div className="col-xs-4">
           <TimePicker className="event-time-input"
             floatingLabelText="Time"
             floatingLabelFixed={true}
+            value={input.timeObject}
             onChange={(_, date) => {
               const timeString = date.getHours() + ':' + date.getMinutes()
-              store.dispatch({ type: 'INPUT_TIME_CHANGED', text: timeString })
+              store.dispatch({ type: 'INPUT_TIME_CHANGED', text: timeString, date: date })
             }}/>
         </div>
       </div>
