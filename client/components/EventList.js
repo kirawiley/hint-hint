@@ -17,7 +17,7 @@ const EventList = (props) => {
   })
 
   const eachEvent = events.map((event, i) => {
-    const displayDate = moment(event.date).format('dddd MM/DD/YYYY HH:mm a')
+    const displayDate = moment(event.date).format('MM/DD/YYYY hh:mm a')
       return (
         <div className="panel panel-default" key={ i }>
           <div className="panel-heading">

@@ -37,11 +37,11 @@ const EventForm = (props) => {
 
   return (
     <div id="form-container">
-      <h5>Create an event:</h5>
+      <h4>Create an event:</h4>
       <div className="row">
         <div className="col-xs-4">
           <TextField
-            id="event-name-input"
+            className="event-name-input"
             floatingLabelText="Event Name"
             floatingLabelFixed={true}
             value={ input.name }
@@ -51,23 +51,29 @@ const EventForm = (props) => {
             />
         </div>
         <div className="col-xs-4">
-          <DatePicker id="event-date-input" hintText="Date" onChange={(_, date) => {
-            const month = date.getMonth() + 1
-            const dateString = date.getFullYear() + '/' + month + '/' + date.getDate()
-            store.dispatch({ type: 'INPUT_DATE_CHANGED', text: dateString })
-          }}/>
+          <DatePicker className="event-date-input"
+            floatingLabelText="Date"
+            floatingLabelFixed={true}
+            onChange={(_, date) => {
+              const month = date.getMonth() + 1
+              const dateString = date.getFullYear() + '/' + month + '/' + date.getDate()
+              store.dispatch({ type: 'INPUT_DATE_CHANGED', text: dateString })
+            }}/>
         </div>
         <div className="col-xs-4">
-          <TimePicker id="event-time-input" hintText="Time" onChange={(_, date) => {
+          <TimePicker className="event-time-input"
+            floatingLabelText="Time"
+            floatingLabelFixed={true}
+            onChange={(_, date) => {
               const timeString = date.getHours() + ':' + date.getMinutes()
-            store.dispatch({ type: 'INPUT_TIME_CHANGED', text: timeString })
-          }}/>
+              store.dispatch({ type: 'INPUT_TIME_CHANGED', text: timeString })
+            }}/>
         </div>
       </div>
       <div className="row">
         <div className="col-xs-6">
           <TextField
-            id="event-notes-input"
+            className="event-notes-input"
             floatingLabelText="Event Description/Notes"
             floatingLabelFixed={true}
             value={ input.notes }
@@ -77,7 +83,7 @@ const EventForm = (props) => {
             />
         </div>
         <div className="col-xs-6">
-          <RaisedButton id="submit-button" label="Submit" primary={true} onClick={ addToSchedule }/>
+          <RaisedButton className="submit-button" label="Submit" primary={true} onClick={ addToSchedule }/>
         </div>
       </div>
     </div>

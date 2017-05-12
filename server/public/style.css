@@ -9,6 +9,11 @@
   border: 2px #a3a3a3 solid;
 }
 
+.submit-button {
+  margin-top: 30px !important;
+  margin-left: -10px !important;
+}
+
 .row {
   margin-top: 25px;
 }
