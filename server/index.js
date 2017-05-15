@@ -6,6 +6,7 @@ const levelup = require('levelup')
 const db = levelup('./hint-hint')
 const schedule = require('node-schedule')
 const twilio = require('twilio')
+const dotenv = require('dotenv').config()
 const client = new twilio(process.env.TWILIO_ACCOUNT_SID, process.env.TWILIO_AUTH_TOKEN)
 const app = express()
 
