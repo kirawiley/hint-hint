@@ -4,6 +4,7 @@ const bodyParser = require('body-parser')
 const dbFunctions = require('./db.js')
 const levelup = require('levelup')
 const db = levelup('./hint-hint')
+const moment = require('moment')
 const schedule = require('node-schedule')
 const twilio = require('twilio')
 const dotenv = require('dotenv').config()
@@ -21,9 +22,10 @@ schedule.scheduleJob('*/10 * * * *', () => {
     .then((data) => {
       for (let i = 0; i < data.length; i++) {
         let value = data[i]
+        const time = moment(value.date).format('hh:mm a')
         if (Math.abs(now - value.date) <= 3600000 && (now - value.date) < 0) {
             client.messages.create({
-            body: 'Don\'t forget! ' + value.name + '. ' + value.notes,
+            body: 'Don\'t forget! At ' + time + ' you have ' + value.name + '. ' + value.notes,
             to: '+19492326936',
             from: '+19492390491'
           })
