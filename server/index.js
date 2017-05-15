@@ -6,9 +6,7 @@ const levelup = require('levelup')
 const db = levelup('./hint-hint')
 const schedule = require('node-schedule')
 const twilio = require('twilio')
-const accountSid = 'AC09cb09a60883400086fef64b0cdc38dd'
-const authToken = '60c540ab832da71ff80bbbe21f452fbc'
-const client = new twilio(accountSid, authToken)
+const client = new twilio(process.env.TWILIO_ACCOUNT_SID, process.env.TWILIO_AUTH_TOKEN)
 const app = express()
 
 app.use(bodyParser.json())
@@ -16,23 +14,22 @@ app.use(bodyParser.json())
 const publicPath = path.join(__dirname, '/public')
 app.use(express.static(publicPath))
 
-schedule.scheduleJob('10 * * * *', () => {
+schedule.scheduleJob('*/10 * * * *', () => {
   const now = Date.now()
   dbFunctions.getCollection(db, 'events')
-    .then(data) => {
+    .then((data) => {
       for (let i = 0; i < data.length; i++) {
-        (value) => {
-          if (value.date === now) {
-              client.messages.create({
-              body: 'Don\'t forget! ' + value.name + '. ' + value.notes,
-              to: '+19492326936',
-              from: '+19492390491'
-            })
-            .then((message) => console.log(message.sid))
-          }
+        let value = data[i]
+        if (Math.abs(now - value.date) <= 3600000 && (now - value.date) < 0) {
+            client.messages.create({
+            body: 'Don\'t forget! ' + value.name + '. ' + value.notes,
+            to: '+19492326936',
+            from: '+19492390491'
+          })
+          .then((message) => console.log(message.sid))
         }
       }
-    }
+    })
 })
 
 app.get('/schedule', (req, res) => {
