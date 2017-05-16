@@ -23,15 +23,19 @@ schedule.scheduleJob('*/10 * * * *', () => {
       for (let i = 0; i < data.length; i++) {
         let value = data[i]
         const time = moment(value.date).format('hh:mm a')
-        if (Math.abs(now - value.date) <= 3600000 && (now - value.date) < 0) {
-            client.messages.create({
+        if (Math.abs(now - value.date) <= 3600000 && (now - value.date) < 0 && value.notified !== true) {
+          value.notified = true
+          client.messages.create({
             body: 'Don\'t forget! At ' + time + ' you have ' + value.name + '. ' + value.notes,
             to: '+19492326936',
             from: '+19492390491'
           })
-          .then((message) => console.log(message.sid))
+          .then((message) => {
+            console.log(message.sid)
+          })
         }
       }
+      dbFunctions.updateCollection(db, 'events', JSON.stringify(data))
     })
 })
 
@@ -44,6 +48,7 @@ app.get('/schedule', (req, res) => {
 
 app.post('/schedule', (req, res) => {
   const scheduleItem = req.body
+  scheduleItem.notified = false
   dbFunctions.getCollection(db, 'events')
     .then((data) => {
       const updated = data.concat([scheduleItem])
