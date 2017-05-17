@@ -4,12 +4,48 @@ const bodyParser = require('body-parser')
 const dbFunctions = require('./db.js')
 const levelup = require('levelup')
 const db = levelup('./hint-hint')
+const moment = require('moment')
+const schedule = require('node-schedule')
+const twilio = require('twilio')
+const dotenv = require('dotenv').config()
+const client = new twilio(process.env.TWILIO_ACCOUNT_SID, process.env.TWILIO_AUTH_TOKEN)
 const app = express()
 
 app.use(bodyParser.json())
 
 const publicPath = path.join(__dirname, '/public')
 app.use(express.static(publicPath))
+
+schedule.scheduleJob('*/10 * * * *', () => {
+  const now = Date.now()
+  const clientMessagePromises = []
+  dbFunctions.getCollection(db, 'events')
+    .then((data) => {
+      for (let i = 0; i < data.length; i++) {
+        let event = data[i]
+        const time = moment(event.date).format('hh:mm a')
+        const withinOneHour = (now, event) => {
+          return Math.abs(now - event.date) <= 3600000 && (now - event.date) < 0
+        }
+        if (withinOneHour(now, event) && !event.notified) {
+          clientMessagePromises.push(client.messages.create({
+            body: 'Don\'t forget! At ' + time + ' you have ' + event.name + '. ' + event.notes,
+            to: process.env.RECIPIENT_PHONE_NUMBER,
+            from: process.env.TWILIO_PHONE_NUMBER
+          })
+          .then((message) => {
+            event.notified = true
+            return message.sid
+          }))
+        }
+    }
+    Promise.all(clientMessagePromises)
+    .then(() => {
+      dbFunctions.updateCollection(db, 'events', JSON.stringify(data))
+    })
+  })
+})
+
 
 app.get('/schedule', (req, res) => {
   dbFunctions.getCollection(db, 'events')
@@ -20,6 +56,7 @@ app.get('/schedule', (req, res) => {
 
 app.post('/schedule', (req, res) => {
   const scheduleItem = req.body
+  scheduleItem.notified = false
   dbFunctions.getCollection(db, 'events')
     .then((data) => {
       const updated = data.concat([scheduleItem])
