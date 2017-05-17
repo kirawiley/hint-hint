@@ -16,26 +16,31 @@ app.use(bodyParser.json())
 const publicPath = path.join(__dirname, '/public')
 app.use(express.static(publicPath))
 
-schedule.scheduleJob('*/10 * * * *', () => {
+schedule.scheduleJob('*/1 * * * *', () => {
   const now = Date.now()
+  const promises = []
   dbFunctions.getCollection(db, 'events')
     .then((data) => {
-      for (let i = 0; i < data.length; i++) {
-        let value = data[i]
-        const time = moment(value.date).format('hh:mm a')
-        if (Math.abs(now - value.date) <= 3600000 && (now - value.date) < 0 && value.notified !== true) {
-          value.notified = true
-          client.messages.create({
-            body: 'Don\'t forget! At ' + time + ' you have ' + value.name + '. ' + value.notes,
-            to: '+19492326936',
-            from: '+19492390491'
-          })
-          .then((message) => {
-            console.log(message.sid)
-          })
-        }
+      const valid = data.filter((event) => {
+        return Math.abs(now - event.date) <= 3600000 && (now - event.date) < 0 && event.notified !== true
+      })
+      for (let i = 0; i < valid.length; i++) {
+        let event = valid[i]
+        const time = moment(event.date).format('hh:mm a')
+        event.notified = true
+        promises.push(client.messages.create({
+          body: 'Don\'t forget! At ' + time + ' you have ' + event.name + '. ' + event.notes,
+          to: process.env.RECIPIENT_PHONE_NUMBER,
+          from: process.env.TWILIO_PHONE_NUMBER
+        }))
+        .then((message) => {
+          console.log(message.sid)
+        })
+        Promise.all(promises)
+        .then(() => {
+          dbFunctions.updateCollection(db, 'events', JSON.stringify(data))
+        })
       }
-      dbFunctions.updateCollection(db, 'events', JSON.stringify(data))
     })
 })
 
