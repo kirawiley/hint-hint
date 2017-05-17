@@ -8,6 +8,8 @@ const moment = require('moment')
 const schedule = require('node-schedule')
 const twilio = require('twilio')
 const dotenv = require('dotenv').config()
+const jwt = require('jsonwebtoken')
+const bcrypt = require('bcrypt')
 const client = new twilio(process.env.TWILIO_ACCOUNT_SID, process.env.TWILIO_AUTH_TOKEN)
 const app = express()
 
@@ -46,7 +48,6 @@ schedule.scheduleJob('*/10 * * * *', () => {
   })
 })
 
-
 app.get('/schedule', (req, res) => {
   dbFunctions.getCollection(db, 'events')
     .then((data) => {
@@ -64,6 +65,32 @@ app.post('/schedule', (req, res) => {
     })
     .then(() => {
       res.json(scheduleItem)
+    })
+})
+
+app.get('/signup', (req, res) => {
+  dbFunctions.getCollection(db, 'users')
+    .then((data) => {
+      res.json(data)
+    })
+})
+
+app.post('/signup', (req, res) => {
+  const { name, phone, password } = req.body
+  dbFunctions.getCollection(db, 'users')
+    .then((data) => {
+      const hashPassword = bcrypt.hashSync(password, 10)
+      const newUser = data.concat([{ name, phone, hashPassword }])
+      dbFunctions.updateCollection(db, 'users', JSON.stringify(newUser))
+      const payload = {
+        name: name,
+        phone: phone
+      }
+      const token = jwt.sign(payload, process.env.SECRET, { expiresIn: '3h' })
+      return token
+    })
+    .then((token) => {
+      res.json(token)
     })
 })
 
