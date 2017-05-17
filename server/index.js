@@ -18,14 +18,17 @@ app.use(express.static(publicPath))
 
 schedule.scheduleJob('*/10 * * * *', () => {
   const now = Date.now()
-  const promises = []
+  const clientMessagePromises = []
   dbFunctions.getCollection(db, 'events')
     .then((data) => {
       for (let i = 0; i < data.length; i++) {
         let event = data[i]
         const time = moment(event.date).format('hh:mm a')
-        if (Math.abs(now - event.date) <= 3600000 && (now - event.date) < 0 && event.notified !== true) {
-          promises.push(client.messages.create({
+        const withinOneHour = (now, event) => {
+          return Math.abs(now - event.date) <= 3600000 && (now - event.date) < 0
+        }
+        if (withinOneHour(now, event) && !event.notified) {
+          clientMessagePromises.push(client.messages.create({
             body: 'Don\'t forget! At ' + time + ' you have ' + event.name + '. ' + event.notes,
             to: process.env.RECIPIENT_PHONE_NUMBER,
             from: process.env.TWILIO_PHONE_NUMBER
@@ -36,7 +39,7 @@ schedule.scheduleJob('*/10 * * * *', () => {
           }))
         }
     }
-    Promise.all(promises)
+    Promise.all(clientMessagePromises)
     .then(() => {
       dbFunctions.updateCollection(db, 'events', JSON.stringify(data))
     })
