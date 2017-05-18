@@ -10,6 +10,7 @@ const schedule = require('node-schedule')
 const twilio = require('twilio')
 const dotenv = require('dotenv').config()
 const jwt = require('jsonwebtoken')
+const jwtExpress = require('jwt-express')
 const bcrypt = require('bcrypt')
 const client = new twilio(process.env.TWILIO_ACCOUNT_SID, process.env.TWILIO_AUTH_TOKEN)
 const app = express()
@@ -49,11 +50,17 @@ schedule.scheduleJob('*/10 * * * *', () => {
   })
 })
 
-app.get('/schedule', (req, res) => {
-  dbFunctions.getCollection(db, 'events')
-    .then((data) => {
-      res.json(data)
-    })
+app.get('/schedule', jwtExpress({ secret: process.env.SECRET }), (req, res) => {
+  if (!req.user) {
+    res.sendStatus(401)
+  }
+  else {
+    dbFunctions.getCollection(db, 'events')
+      .then((data) => {
+        res.json(data)
+      })
+    }
+  }
 })
 
 app.post('/schedule', (req, res) => {
@@ -101,7 +108,7 @@ app.post('/login', (req, res) => {
       for (let i = 0; i < data.length; i++) {
         const user = data[i]
         if (user.phone === phone) {
-          if (bcrypt.compareSync(password, user.password)) {
+          if (bcrypt.compareSync(password, user.hashPassword)) {
             const payload = {
               phone: phone
             }
