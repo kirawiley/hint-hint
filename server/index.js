@@ -2,6 +2,7 @@ const express = require('express')
 const path = require('path')
 const bodyParser = require('body-parser')
 const dbFunctions = require('./db.js')
+const getToken = require('./getToken')
 const levelup = require('levelup')
 const db = levelup('./hint-hint')
 const moment = require('moment')
@@ -86,13 +87,40 @@ app.post('/signup', (req, res) => {
         name: name,
         phone: phone
       }
-      const token = jwt.sign(payload, process.env.SECRET, { expiresIn: '3h' })
-      return token
+      return getToken(payload)
     })
     .then((token) => {
-      res.json(token)
+      res.json({ token })
     })
 })
+
+app.post('/login', (req, res) => {
+  const { phone, password } = req.body
+  dbFunctions.getCollection(db, 'users')
+    .then((data) => {
+      for (let i = 0; i < data.length; i++) {
+        const user = data[i]
+        if (user.phone === phone) {
+          if (bcrypt.compareSync(password, user.password)) {
+            const payload = {
+              phone: phone
+            }
+            return getToken(payload)
+          }
+          else {
+            res.sendStatus(401)
+          }
+        }
+        else {
+          res.sendStatus(404)
+        }
+      }
+    })
+    .then((token) => {
+      res.json({ token })
+    })
+})
+
 
 app.listen(3000, () => {
   console.log('Listening on port 3000!')
