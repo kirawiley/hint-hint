@@ -51,14 +51,25 @@ schedule.scheduleJob('*/10 * * * *', () => {
 })
 
 app.get('/schedule', jwtExpress({ secret: process.env.SECRET }), (req, res) => {
+  const user = req.user.phone
   dbFunctions.getCollection(db, 'events')
     .then((data) => {
-      res.json(data)
+      for (let i = 0; i < data.length; i++) {
+        const event = data[i]
+        if (event.phone === user) {
+          res.json(event)
+        }
+        else {
+          return res.status(404).json({ error: 'no events found' })
+        }
+      }
     })
 })
 
 app.post('/schedule', jwtExpress({ secret: process.env.SECRET }), (req, res) => {
+  const user = req.user.phone
   const scheduleItem = req.body
+  scheduleItem.phone = user
   scheduleItem.notified = false
   dbFunctions.getCollection(db, 'events')
     .then((data) => {
@@ -95,21 +106,6 @@ app.post('/signup', (req, res) => {
     })
 })
 
-
-const findUser = (phone) => {
-  dbFunctions.getCollection(db, 'users')
-    .then((data) => {
-      for (let i = 0; i < data.length; i++) {
-        const user = data[i]
-        if (user.phone === phone) {
-          return user.phone
-        }
-      }
-    })
-}
-
-console.log(findUser('9492326936'))
-
 app.post('/login', (req, res) => {
   const { phone, password } = req.body
   dbFunctions.getCollection(db, 'users')
@@ -142,7 +138,6 @@ app.use((err, req, res, next) => {
     return res.status(401).json({ error: 'not authorized' })
   }
 })
-
 
 app.listen(3000, () => {
   console.log('Listening on port 3000!')
