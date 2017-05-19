@@ -10,7 +10,7 @@ const schedule = require('node-schedule')
 const twilio = require('twilio')
 const dotenv = require('dotenv').config()
 const jwt = require('jsonwebtoken')
-const jwtExpress = require('jwt-express')
+const jwtExpress = require('express-jwt')
 const bcrypt = require('bcrypt')
 const client = new twilio(process.env.TWILIO_ACCOUNT_SID, process.env.TWILIO_AUTH_TOKEN)
 const app = express()
@@ -51,19 +51,13 @@ schedule.scheduleJob('*/10 * * * *', () => {
 })
 
 app.get('/schedule', jwtExpress({ secret: process.env.SECRET }), (req, res) => {
-  if (!req.user) {
-    res.sendStatus(401)
-  }
-  else {
-    dbFunctions.getCollection(db, 'events')
-      .then((data) => {
-        res.json(data)
-      })
-    }
-  }
+  dbFunctions.getCollection(db, 'events')
+    .then((data) => {
+      res.json(data)
+    })
 })
 
-app.post('/schedule', (req, res) => {
+app.post('/schedule', jwtExpress({ secret: process.env.SECRET }), (req, res) => {
   const scheduleItem = req.body
   scheduleItem.notified = false
   dbFunctions.getCollection(db, 'events')
@@ -101,6 +95,21 @@ app.post('/signup', (req, res) => {
     })
 })
 
+
+const findUser = (phone) => {
+  dbFunctions.getCollection(db, 'users')
+    .then((data) => {
+      for (let i = 0; i < data.length; i++) {
+        const user = data[i]
+        if (user.phone === phone) {
+          return user.phone
+        }
+      }
+    })
+}
+
+console.log(findUser('9492326936'))
+
 app.post('/login', (req, res) => {
   const { phone, password } = req.body
   dbFunctions.getCollection(db, 'users')
@@ -115,17 +124,23 @@ app.post('/login', (req, res) => {
             return getToken(payload)
           }
           else {
-            res.sendStatus(401)
+            return res.status(401).json({ error: 'incorrect password' })
           }
         }
         else {
-          res.sendStatus(404)
+          return res.status(404).json({ error: 'user not found' })
         }
       }
     })
     .then((token) => {
       res.json({ token })
     })
+})
+
+app.use((err, req, res, next) => {
+  if (err) {
+    return res.status(401).json({ error: 'not authorized' })
+  }
 })
 
 
