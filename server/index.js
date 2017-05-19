@@ -108,28 +108,21 @@ app.post('/signup', (req, res) => {
 
 app.post('/login', (req, res) => {
   const { phone, password } = req.body
-  dbFunctions.getCollection(db, 'users')
+  dbFunctions.findUser(phone)
     .then((data) => {
-      for (let i = 0; i < data.length; i++) {
-        const user = data[i]
-        if (user.phone === phone) {
-          if (bcrypt.compareSync(password, user.hashPassword)) {
-            const payload = {
-              phone: phone
-            }
-            return getToken(payload)
-          }
-          else {
-            return res.status(401).json({ error: 'incorrect password' })
-          }
+      if (bcrypt.compareSync(password, user.hashPassword)) {
+        const payload = {
+          phone: phone
         }
-        else {
-          return res.status(404).json({ error: 'user not found' })
-        }
+        const token = getToken(payload)
+        res.json({ token })
+      }
+      else {
+        return res.status(401).json({ error: 'incorrect password' })
       }
     })
-    .then((token) => {
-      res.json({ token })
+    .catch(() => {
+      return res.status(404).json({ error: 'user not found' })
     })
 })
 

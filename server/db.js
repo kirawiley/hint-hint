@@ -17,4 +17,21 @@ function updateCollection(db, key, value) {
   })
 }
 
-module.exports = { getCollection, updateCollection }
+function findUser(phone) {
+  return new Promise((resolve, reject) => {
+    getCollection(db, 'users')
+      .then((data) => {
+        console.log(data)
+        const matchingUser = data.find((user) => {
+          if (user.phone === phone) {
+            resolve(matchingUser)
+          }
+          else {
+            reject()
+          }
+        })
+      })
+  })
+}
+
+module.exports = { getCollection, updateCollection, findUser }
