@@ -27,7 +27,7 @@ schedule.scheduleJob('*/10 * * * *', () => {
     .then((data) => {
       for (let i = 0; i < data.length; i++) {
         let event = data[i]
-        const time = moment(event.date).format('hh:mm a')
+        const time = moment(event.date, 'hh:mm a')
         const withinOneHour = (now, event) => {
           return Math.abs(now - event.date) <= 3600000 && (now - event.date) < 0
         }
@@ -51,18 +51,21 @@ schedule.scheduleJob('*/10 * * * *', () => {
 })
 
 app.get('/schedule', jwtExpress({ secret: process.env.SECRET }), (req, res) => {
-  const user = req.user.phone
-  dbFunctions.getCollection(db, 'events')
-    .then((data) => {
-      for (let i = 0; i < data.length; i++) {
-        const event = data[i]
-        if (event.phone === user) {
-          res.json(event)
-        }
-        else {
-          return res.status(404).json({ error: 'no events found' })
-        }
-      }
+  const userPhone = req.user.phone
+  dbFunctions.findUser(db, userPhone)
+    .then((user) => {
+      dbFunctions.getCollection(db, 'events')
+        .then((events) => {
+          const userEvents = events.filter((event) => {
+            return event.phone === userPhone
+          })
+          if (userEvents) {
+            res.json(userEvents)
+          }
+          else {
+            return res.status(404).json({ error: 'no events found' })
+          }
+        })
     })
 })
 
@@ -78,13 +81,6 @@ app.post('/schedule', jwtExpress({ secret: process.env.SECRET }), (req, res) => 
     })
     .then(() => {
       res.json(scheduleItem)
-    })
-})
-
-app.get('/signup', (req, res) => {
-  dbFunctions.getCollection(db, 'users')
-    .then((data) => {
-      res.json(data)
     })
 })
 
@@ -108,8 +104,8 @@ app.post('/signup', (req, res) => {
 
 app.post('/login', (req, res) => {
   const { phone, password } = req.body
-  dbFunctions.findUser(phone)
-    .then((data) => {
+  dbFunctions.findUser(db, phone)
+    .then((user) => {
       if (bcrypt.compareSync(password, user.hashPassword)) {
         const payload = {
           phone: phone
