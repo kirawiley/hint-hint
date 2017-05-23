@@ -8,7 +8,7 @@ const SignUp = (props) => {
   const { name, phone, password } = props
 
   const addUser = () => {
-    return fetch('signup', {
+    return fetch('/signup', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'

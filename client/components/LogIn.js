@@ -5,22 +5,19 @@ const RaisedButton = require('material-ui/RaisedButton').default
 const TextField = require('material-ui/TextField').default
 
 const LogIn = (props) => {
-  /*const logInUser = () => {
+  const user = store.getState().logIn
+  const logInToken = () => {
     return fetch('/login', {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json'
-          'Authorization': 'Bearer ' + authFunctions.setToken()
-        }//,
-        //body: JSON.stringify(user)
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(user)
       })
-      .then(() => {
-        if(isLoggedIn()) {
-          return
-        }
+      .then((response) => {
+        console.log(response)
       })
-    })
-  }*/
+    }
 
   return (
     <div id="login-container">
@@ -49,7 +46,7 @@ const LogIn = (props) => {
         </div>
       </div>
       <div className="row">
-          <RaisedButton className="login-button" label="Log In" primary={true}/>
+          <RaisedButton className="login-button" label="Log In" primary={true} onClick={ logInToken }/>
       </div>
     </div>
   )
