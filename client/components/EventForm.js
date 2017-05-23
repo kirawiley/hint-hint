@@ -21,8 +21,7 @@ const EventForm = (props) => {
   }
 
   const addToSchedule = () => {
-    const formState = store.getState().form
-    const scheduleItem = formatSchedule(formState)
+    const scheduleItem = formatSchedule(input)
     return fetch('/schedule', {
       method: 'POST',
       headers: {

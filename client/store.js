@@ -1,8 +1,9 @@
 const Redux = require('redux')
-const eventsState = []
 const formState = {name: '', day: '', dayObject: null, time: '', timeObject: null, notes: ''}
+const signUpState = {name: '', phone: '', password: ''}
+const logInState = {phone: '', password: ''}
 
-function events(state = eventsState, action) {
+function events(state = [], action) {
   const stateClone = []
   switch (action.type) {
     case 'NEW_EVENT':
@@ -37,7 +38,46 @@ function form(state = formState, action) {
   }
 }
 
-const reducer = Redux.combineReducers({ events, form })
+function users(state = [], action) {
+  const stateClone = []
+  switch (action.type) {
+    case 'NEW USER':
+      stateClone.push(action.text)
+      return state.concat(stateClone)
+    default: return state
+  }
+}
+
+function signUp(state = signUpState, action) {
+  const stateClone = Object.assign({}, state)
+  switch (action.type) {
+    case 'SIGNUP_NAME_CHANGED':
+      stateClone.name = action.text
+      return stateClone
+    case 'SIGNUP_PHONE_CHANGED':
+      stateClone.phone = action.text
+      return stateClone
+    case 'SIGNUP_PASSWORD_CHANGED':
+      stateClone.password = action.text
+      return stateClone
+    default: return state
+  }
+}
+
+function logIn(state = logInState, action) {
+  const stateClone = Object.assign({}, state)
+  switch (action.type) {
+    case 'LOGIN_PHONE_CHANGED':
+      stateClone.phone = action.text
+      return stateClone
+    case 'LOGIN_PASSWORD_CHANGED':
+      stateClone.password = action.text
+      return stateClone
+    default: return state
+  }
+}
+
+const reducer = Redux.combineReducers({ events, form, users, signUp, logIn })
 const store = Redux.createStore(reducer)
 
 module.exports = store

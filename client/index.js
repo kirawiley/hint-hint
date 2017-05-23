@@ -1,6 +1,8 @@
 const React = require('react')
 const ReactDOM = require('react-dom')
 const Redux = require('redux')
+const SignUp = require ('./components/SignUp')
+const LogIn = require('./components/LogIn')
 const EventForm = require('./components/EventForm')
 const EventList = require('./components/EventList')
 const store = require('./store')
@@ -11,22 +13,29 @@ window.store = store
 injectTapEventPlugin()
 
 fetch('/schedule')
-.then((response) => {
-  return response.json()
-})
-.then((schedule) => {
-  store.dispatch({ type: 'SCHEDULE_LOADED', content: schedule })
-})
+  .then((response) => {
+    return response.json()
+  })
+  .then((schedule) => {
+    store.dispatch({ type: 'SCHEDULE_LOADED', content: schedule })
+  })
 
 function App(props) {
   return (
+    <div>
+      <MuiThemeProvider>
+        <LogIn/>
+      </MuiThemeProvider>
+    </div>
+  )
+  /*return (
     <div>
       <MuiThemeProvider>
         <EventForm/>
       </MuiThemeProvider>
       <EventList/>
     </div>
-  )
+  )*/
 }
 
 function render() {
