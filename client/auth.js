@@ -1,4 +1,4 @@
-const isLoggedIn = () => {
+const isLoggedIn = (token) => {
 
 }
 
@@ -6,8 +6,8 @@ const getToken = (token) => {
   localStorage.getItem(token)
 }
 
-const setToken = (user) => {
-  localStorage.setItem('token', user)
+const setToken = (token) => {
+  localStorage.setItem('token', token)
 }
 
 module.exports = { getToken, setToken }

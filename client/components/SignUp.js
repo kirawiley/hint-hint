@@ -1,7 +1,12 @@
 const React = require('react')
+const ReactDOM = require('react-dom')
 const store = require('../store')
+const LogIn = require('./LogIn')
+const MuiThemeProvider = require('material-ui/styles/MuiThemeProvider').default
+const injectTapEventPlugin = require('react-tap-event-plugin')
 const RaisedButton = require('material-ui/RaisedButton').default
 const TextField = require('material-ui/TextField').default
+const container = document.getElementById('container')
 
 const SignUp = (props) => {
   const user = store.getState().signUp
@@ -18,8 +23,7 @@ const SignUp = (props) => {
       .then(() => {
         store.dispatch({ type: 'NEW_USER', text: user })
       })
-    }
-
+  }
 
   return (
     <div id="signup-container">
@@ -66,7 +70,9 @@ const SignUp = (props) => {
           <RaisedButton className="signup-button" label="Sign Up" primary={true} onClick={ addUser }/>
       </div>
       <div className="row">
-        <span id="login-link" onClick={ LogIn }>Already registered? Log in here.</span>
+        <span id="login-link" onClick={() => {
+          store.dispatch({ type: 'LOG_IN_OPEN' })
+          }}>Already registered? Log in here.</span>
       </div>
     </div>
   )

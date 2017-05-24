@@ -14,10 +14,13 @@ const LogIn = (props) => {
         },
         body: JSON.stringify(user)
       })
-      .then((response) => {
-        console.log(response)
+      .then((res) => {
+        return res.json()
       })
-    }
+      .then((tokenObject) => {
+        authFunctions.setToken(tokenObject.token)
+      })
+  }
 
   return (
     <div id="login-container">

@@ -21,21 +21,20 @@ fetch('/schedule')
   })
 
 function App(props) {
-  return (
-    <div>
-      <MuiThemeProvider>
-        <LogIn/>
-      </MuiThemeProvider>
-    </div>
-  )
-  /*return (
-    <div>
-      <MuiThemeProvider>
-        <EventForm/>
-      </MuiThemeProvider>
-      <EventList/>
-    </div>
-  )*/
+  if (store.getState().isLogInOpen === true) {
+      return (
+        <MuiThemeProvider>
+          <LogIn/>
+        </MuiThemeProvider>
+      )
+    }
+    else {
+      return (
+        <MuiThemeProvider>
+          <SignUp/>
+        </MuiThemeProvider>
+      )
+    }
 }
 
 function render() {
