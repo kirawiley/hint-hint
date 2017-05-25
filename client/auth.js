@@ -1,13 +1,18 @@
-const isLoggedIn = (token) => {
-
+const isLoggedIn = () => {
+  if (getToken() !== null) {
+    return true
+  }
+  else {
+    return false
+  }
 }
 
-const getToken = (token) => {
-  localStorage.getItem(token)
+const getToken = () => {
+  return localStorage.getItem('token')
 }
 
 const setToken = (token) => {
   localStorage.setItem('token', token)
 }
 
-module.exports = { getToken, setToken }
+module.exports = { getToken, setToken, isLoggedIn }

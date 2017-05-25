@@ -1,6 +1,7 @@
 const React = require('react')
 const store = require('../store')
 const moment = require('moment')
+const authFunctions = require('../auth')
 const RaisedButton = require('material-ui/RaisedButton').default
 const TextField = require('material-ui/TextField').default
 const DatePicker = require('material-ui/DatePicker').default
@@ -25,7 +26,8 @@ const EventForm = (props) => {
     return fetch('/schedule', {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + authFunctions.getToken()
       },
       body: JSON.stringify(scheduleItem)
     })

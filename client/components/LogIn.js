@@ -6,6 +6,11 @@ const TextField = require('material-ui/TextField').default
 
 const LogIn = (props) => {
   const user = store.getState().logIn
+
+  const openEvents = () => {
+    store.dispatch({ type: 'EVENTS_OPEN' })
+  }
+
   const logInToken = () => {
     return fetch('/login', {
         method: 'POST',

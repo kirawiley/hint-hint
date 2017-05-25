@@ -15,6 +15,14 @@ function events(state = [], action) {
   }
 }
 
+function areEventsOpen(state = false, action) {
+  switch (action.type) {
+    case 'EVENTS_OPEN':
+      return true
+    default: return state
+  }
+}
+
 function form(state = formState, action) {
   const stateClone = Object.assign({}, state)
   switch (action.type) {
@@ -68,8 +76,6 @@ function isLogInOpen(state = false, action) {
   switch (action.type) {
     case 'LOG_IN_OPEN':
       return true
-    case 'LOG_IN_CLOSED':
-      return false
     default: return state
   }
 }
@@ -87,7 +93,7 @@ function logIn(state = logInState, action) {
   }
 }
 
-const reducer = Redux.combineReducers({ events, form, users, signUp, isLogInOpen, logIn })
+const reducer = Redux.combineReducers({ events, areEventsOpen, form, users, signUp, isLogInOpen, logIn })
 const store = Redux.createStore(reducer)
 
 module.exports = store
