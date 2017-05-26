@@ -24,6 +24,7 @@ const LogIn = (props) => {
       })
       .then((tokenObject) => {
         authFunctions.setToken(tokenObject.token)
+        openEvents()
       })
   }
 

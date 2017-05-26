@@ -14,7 +14,7 @@ window.store = store
 injectTapEventPlugin()
 
 function App(props) {
-  if (store.getState().isLogInOpen) {
+  if (!authFunctions.isLoggedIn() && store.getState().isLogInOpen) {
     return (
       <MuiThemeProvider>
         <LogIn/>
@@ -22,7 +22,7 @@ function App(props) {
     )
   }
 
-  else if (authFunctions.isLoggedIn() && store.getState().areEventsOpen) {
+  else if (authFunctions.isLoggedIn()) {
     fetch('/schedule', {
       method: 'GET',
       headers: {
