@@ -18,11 +18,26 @@ const SignUp = (props) => {
         headers: {
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify(user)
+        body: JSON.stringify(formatUser(user))
       })
       .then(() => {
         store.dispatch({ type: 'NEW_USER', text: user })
       })
+  }
+
+  const formatUser = (user) => {
+    if (user.phone.length === 10) {
+      const phoneFormat = '+1' + user.phone
+      return {
+        name: user.name,
+        phone: phoneFormat,
+        password: user.password
+      }
+    }
+
+    else {
+      alert('Please only use numbers when inputting your phone number.')
+    }
   }
 
   return (
