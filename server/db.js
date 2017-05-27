@@ -22,7 +22,8 @@ function findUser(db, phone) {
     getCollection(db, 'users')
       .then((data) => {
         const matchingUser = data.find((user) => {
-          return user.phone === phone
+          const phoneFormat = '+1' + phone
+          return user.phone === phoneFormat
         })
         if (matchingUser) {
           resolve(matchingUser)

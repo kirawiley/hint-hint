@@ -27,7 +27,7 @@ schedule.scheduleJob('*/10 * * * *', () => {
     .then((data) => {
       for (let i = 0; i < data.length; i++) {
         let event = data[i]
-        const time = moment(event.date, 'hh:mm a')
+        const time = moment(event.date).format('hh:mm a')
         const withinOneHour = (now, event) => {
           return Math.abs(now - event.date) <= 3600000 && (now - event.date) < 0
         }
@@ -102,13 +102,20 @@ app.post('/signup', (req, res) => {
     })
 })
 
+app.get('/signup', (req, res) => {
+  db.getCollection(db, 'users')
+    .then((data) => {
+      res.json(data)
+    })
+})
+
 app.post('/login', (req, res) => {
   const { phone, password } = req.body
   dbFunctions.findUser(db, phone)
     .then((user) => {
       if (bcrypt.compareSync(password, user.hashPassword)) {
         const payload = {
-          phone: phone
+          phone: '+1' + phone
         }
         const token = getToken(payload)
         res.json({ token })

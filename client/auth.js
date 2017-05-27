@@ -1,5 +1,9 @@
-const isLoggedIn = () => {
-  if (getToken() !== null) {
+function getToken() {
+  return localStorage.getItem('token')
+}
+
+function isLoggedIn() {
+  if (getToken() !== null && getToken() !== 'undefined') {
     return true
   }
   else {
@@ -7,11 +11,7 @@ const isLoggedIn = () => {
   }
 }
 
-const getToken = () => {
-  return localStorage.getItem('token')
-}
-
-const setToken = (token) => {
+function setToken(token) {
   localStorage.setItem('token', token)
 }
 

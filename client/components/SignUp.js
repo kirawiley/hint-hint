@@ -18,7 +18,7 @@ const SignUp = (props) => {
         headers: {
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify(formatUser(user))
+        body: JSON.stringify(user)
       })
       .then(() => {
         store.dispatch({ type: 'NEW_USER', text: user })
@@ -27,6 +27,7 @@ const SignUp = (props) => {
 
   const formatUser = (user) => {
     if (user.phone.length === 10) {
+      alert('Welcome to hint hint! Please use the link below to sign in to your new account.')
       const phoneFormat = '+1' + user.phone
       return {
         name: user.name,
