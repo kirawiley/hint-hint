@@ -13,6 +13,22 @@ const container = document.getElementById('container')
 window.store = store
 injectTapEventPlugin()
 
+const fetchEvents = () => {
+  return fetch('/schedule', {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer ' + authFunctions.getToken()
+      }
+    })
+    .then((response) => {
+      return response.json()
+    })
+    .then((schedule) => {
+      store.dispatch({ type: 'SCHEDULE_LOADED', content: schedule })
+    })
+}
+
 function App(props) {
   if (!authFunctions.isLoggedIn() && store.getState().isLogInOpen) {
     return (
@@ -23,19 +39,7 @@ function App(props) {
   }
 
   else if (authFunctions.isLoggedIn()) {
-    fetch('/schedule', {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer ' + authFunctions.getToken()
-        }
-      })
-      .then((response) => {
-        return response.json()
-      })
-      .then((schedule) => {
-        store.dispatch({ type: 'SCHEDULE_LOADED', content: schedule })
-      })
+    fetchEvents()
     return (
       <div>
         <MuiThemeProvider>

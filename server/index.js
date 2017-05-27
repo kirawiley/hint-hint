@@ -95,17 +95,11 @@ app.post('/signup', (req, res) => {
         name: name,
         phone: phone
       }
+      console.log(payload)
       return getToken(payload)
     })
     .then((token) => {
       res.json({ token })
-    })
-})
-
-app.get('/signup', (req, res) => {
-  db.getCollection(db, 'users')
-    .then((data) => {
-      res.json(data)
     })
 })
 
