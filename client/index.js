@@ -27,6 +27,9 @@ const fetchEvents = () => {
     .then((schedule) => {
       store.dispatch({ type: 'SCHEDULE_LOADED', content: schedule })
     })
+    .catch(() => {
+      console.log('error: could not retrieve events')
+    })
 }
 
 function App(props) {

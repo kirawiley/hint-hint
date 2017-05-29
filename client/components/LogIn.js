@@ -14,12 +14,16 @@ const LogIn = (props) => {
   }
 
   const logInToken = () => {
+    const logInUser = {
+      phone: '+1' + user.phone,
+      password: user.password
+    }
     return fetch('/login', {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json',
+          'Content-Type': 'application/json'
         },
-        body: JSON.stringify(user)
+        body: JSON.stringify(logInUser)
       })
       .then((res) => {
         return res.json()

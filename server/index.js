@@ -109,7 +109,7 @@ app.post('/login', (req, res) => {
     .then((user) => {
       if (bcrypt.compareSync(password, user.hashPassword)) {
         const payload = {
-          phone: '+1' + phone
+          phone: phone
         }
         const token = getToken(payload)
         res.json({ token })
