@@ -37,7 +37,7 @@ const EventForm = (props) => {
   }
 
   return (
-    <div id="form-container">
+    <div className="border" id="form-container">
       <h4>Create an event:</h4>
       <div className="row">
         <div className="col-xs-4">

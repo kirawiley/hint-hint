@@ -42,9 +42,9 @@ const SignUp = (props) => {
   }
 
   return (
-    <div id="signup-container">
+    <div className="border" id="signup-container">
       <div className="row">
-        <h3 id="logo">hint hint</h3>
+        <h3 className="logo">hint hint</h3>
       </div>
       <div className="row">
         <div className="col-xs-12">

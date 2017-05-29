@@ -95,7 +95,6 @@ app.post('/signup', (req, res) => {
         name: name,
         phone: phone
       }
-      console.log(payload)
       return getToken(payload)
     })
     .then((token) => {

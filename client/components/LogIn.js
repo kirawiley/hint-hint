@@ -35,7 +35,7 @@ const LogIn = (props) => {
   }
 
   return (
-    <div id="login-container">
+    <div className="border" id="login-container">
       <div className="row">
         <div className="col-xs-12">
           <TextField
