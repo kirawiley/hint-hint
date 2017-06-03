@@ -6,7 +6,13 @@
   padding: 15px;
   width: 800px;
   height: 300px;
+}
+
+.border {
   border: 2px #a3a3a3 solid;
+  -moz-box-shadow: 0 0 30px #ccc;
+  -webkit-box-shadow: 0 0 30px #ccc;
+  box-shadow: 0 0 30px #ccc;
 }
 
 .submit-button {
@@ -28,4 +34,43 @@
 
 .panel-title span {
   margin-right: 50px;
+}
+
+#signup-container {
+  position: relative;
+  margin: 0 auto;
+  margin-top: 100px;
+  width: 500px;
+  height: 600px;
+  text-align: center;
+}
+
+.logo {
+  font-family: "Pacifico";
+  font-size: 60px;
+  color: #00BCD4;
+}
+
+.signup-button {
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+#login-link {
+  text-decoration: underline;
+  color: #a3a3a3;
+}
+
+#login-link:hover {
+  color: #00BCD4;
+  cursor: pointer;
+}
+
+#login-container {
+  position: relative;
+  margin: 0 auto;
+  margin-top: 100px;
+  width: 500px;
+  height: 300px;
+  text-align: center;
 }

@@ -1,6 +1,7 @@
 const React = require('react')
 const store = require('../store')
 const moment = require('moment')
+const authFunctions = require('../auth')
 const RaisedButton = require('material-ui/RaisedButton').default
 const TextField = require('material-ui/TextField').default
 const DatePicker = require('material-ui/DatePicker').default
@@ -21,12 +22,12 @@ const EventForm = (props) => {
   }
 
   const addToSchedule = () => {
-    const formState = store.getState().form
-    const scheduleItem = formatSchedule(formState)
+    const scheduleItem = formatSchedule(input)
     return fetch('/schedule', {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + authFunctions.getToken()
       },
       body: JSON.stringify(scheduleItem)
     })
@@ -36,7 +37,7 @@ const EventForm = (props) => {
   }
 
   return (
-    <div id="form-container">
+    <div className="border" id="form-container">
       <h4>Create an event:</h4>
       <div className="row">
         <div className="col-xs-4">
