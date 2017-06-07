@@ -11,8 +11,12 @@ function isLoggedIn() {
   }
 }
 
+function logOut() {
+  localStorage.removeItem('token')
+}
+
 function setToken(token) {
   localStorage.setItem('token', token)
 }
 
-module.exports = { getToken, setToken, isLoggedIn }
+module.exports = { getToken, setToken, isLoggedIn, logOut }
