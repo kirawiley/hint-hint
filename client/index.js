@@ -5,6 +5,7 @@ const SignUp = require ('./components/SignUp')
 const LogIn = require('./components/LogIn')
 const EventForm = require('./components/EventForm')
 const EventList = require('./components/EventList')
+const Header = require('./components/Header')
 const store = require('./store')
 const authFunctions = require('./auth')
 const MuiThemeProvider = require('material-ui/styles/MuiThemeProvider').default
@@ -45,6 +46,9 @@ function App(props) {
     fetchEvents()
     return (
       <div>
+        <MuiThemeProvider>
+          <Header/>
+        </MuiThemeProvider>
         <MuiThemeProvider>
           <EventForm/>
         </MuiThemeProvider>
