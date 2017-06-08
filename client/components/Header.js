@@ -10,7 +10,7 @@ const Header = (props) => {
           <div className="navbar-header">
             <span className="logo">hint hint</span>
           </div>
-            <RaisedButton className="logout-button" label="Log Out" primary={true} onClick={ authFunctions.logOut }/>
+          <RaisedButton className="logout-button" label="Log Out" primary={true} onClick={ authFunctions.logOut }/>
         </div>
       </nav>
     </div>
